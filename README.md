@@ -29,7 +29,7 @@
 1. Настроенный репозиторий GitHub:
     В репозитории должны быть настроены Pages на определённую ветку репощитория.
 
-    ![github](images\github.jpg)
+    ![github](https://github.com/SergeyAkkuratov/OTUS_homework_lesson52/blob/sakkuratov/images/github.jpg)
 
     Подробности можно узнать [здесь](https://docs.github.com/ru/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 1. Установленый и настроенный Git для выполнения операций.
@@ -51,7 +51,7 @@
 
     ### Демонстрация:
 
-    ![wizard](images\Wizard_default.gif)
+    ![wizard](https://github.com/SergeyAkkuratov/OTUS_homework_lesson52/blob/sakkuratov/images/Wizard_default.gif)
 
 1. Запуск с использованием аргументов командой строки:
 
@@ -64,7 +64,7 @@
     
     ### Демонстрация:
 
-    ![options](images\options.gif)
+    ![options](https://github.com/SergeyAkkuratov/OTUS_homework_lesson52/blob/sakkuratov/images/options.gif)
 
     ### Справка по аргументам:
 
@@ -91,7 +91,7 @@
 
 После неё выведется текст ошибки:
 
-![error](images\error.jpg)
+![error](https://github.com/SergeyAkkuratov/OTUS_homework_lesson52/blob/sakkuratov/images/error.jpg)
 
 В данном случае мы попытались опудликовать файлы, которые уже и так содержатся в GitHub Pages без каких-либо изменений.
 
