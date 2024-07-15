@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { Command } from "commander";
 import publish from "./gitApi";
 import runWizard from "./wizard";
