@@ -11,7 +11,7 @@ if (process.argv.length < 3) {
     program
         .name("gh-pub")
         .description("CLI to publish files to GitHub Pages.")
-        .version("0.1.0")
+        .version("1.0.0")
         .requiredOption(
             "-r, --repository <url>",
             "set URL of GitHub Git repository in https://github.com/<your profile>/<your repository>.git format"
