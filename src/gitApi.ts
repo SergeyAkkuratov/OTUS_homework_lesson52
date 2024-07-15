@@ -20,7 +20,7 @@ export interface ExecError {
 }
 
 export function showMessage(message: string, options?: OptionValues) {
-    if(!options?.silence){
+    if (!options?.silence) {
         console.log(message);
     }
 }

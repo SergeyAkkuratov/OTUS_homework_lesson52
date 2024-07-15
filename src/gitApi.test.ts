@@ -139,8 +139,8 @@ describe("Git API tests", () => {
         showMessage("error", { silence: true });
         showMessage("test 1", { silence: false });
         showMessage("test 2");
-        
+
         expect(logSpy).toHaveBeenCalledWith("test 1");
         expect(logSpy).toHaveBeenCalledWith("test 2");
-    })
+    });
 });

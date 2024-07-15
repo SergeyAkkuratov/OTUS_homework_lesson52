@@ -1,4 +1,4 @@
-name: Check, Build, Publish and GitHub Pages deploy
+name: Check, Build and Publish npm package
 
 on:
     pull_request:

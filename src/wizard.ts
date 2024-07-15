@@ -26,7 +26,7 @@ export default async function runWizard() {
         options.exec = await input({ message: "Enter command to run before deploy:" });
     }
 
-    options.silence = !await confirm({ message: "Do you want to see info message from gh-pub?", default: true });
+    options.silence = !(await confirm({ message: "Do you want to see info message from gh-pub?", default: true }));
 
     return options;
 }
