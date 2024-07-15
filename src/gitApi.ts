@@ -1,20 +1,73 @@
 import { OptionValues } from "commander";
-import fs from "fs"
-import { execSync } from "node:child_process"
+import crypto from "crypto";
+import fs from "fs";
+import { execSync } from "child_process";
 
-export default function publish(options: OptionValues){
-  try {
-    execSync(`git clone ${options.repository} ./temp123`);
-    execSync(`git checkout ${options.branch}`, { cwd: "./temp123" });
-  
-    fs.cpSync(options.deploy, "./temp123", { recursive: true });
-  
-    execSync(`git add .`, { cwd: "./temp123" });
-    execSync(`git commit -m "GitHub Pages deploy"`, { cwd: "./temp123" });
-    execSync(`git push`, { cwd: "./temp123" });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    fs.rmSync("./temp123", { recursive: true, force: true })
-  }
+const delay = (ms: number) =>
+    new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+const tmpDirName = crypto.randomBytes(20).toString("hex");
+const atempts = 3;
+
+export interface ExecError {
+    status: number;
+    signal: number | null;
+    output: Buffer[];
+    pid: number;
+    stdout: Buffer;
+    stderr: Buffer;
+}
+
+export function isExecError(e: unknown): e is ExecError {
+    return (
+        !!e &&
+        typeof e === "object" &&
+        "status" in e &&
+        typeof e.status === "number" &&
+        "signal" in e &&
+        (typeof e.signal === "number" || e.signal === null) &&
+        "output" in e &&
+        Array.isArray(e.output) &&
+        "pid" in e &&
+        typeof e.pid === "number" &&
+        "stdout" in e &&
+        e.stdout instanceof Buffer &&
+        "stderr" in e &&
+        e.stderr instanceof Buffer
+    );
+}
+
+export default async function publish(options: OptionValues) {
+    try {
+        if (options.exec) {
+            execSync(`${options.exec}`);
+        }
+        execSync(`git clone ${options.repository} ${tmpDirName}`, { stdio: ["ignore", "pipe", "pipe"] });
+        execSync(`git checkout ${options.branch}`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
+
+        fs.cpSync(options.deploy, tmpDirName, { recursive: true });
+
+        execSync(`git add .`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
+        execSync(`git commit -m "GitHub Pages deploy"`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
+        execSync(`git push`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
+    } catch (error) {
+        if (isExecError(error)) {
+            console.error(`${error.stdout}\n${error.stderr}`);
+        } else {
+            console.error(error);
+        }
+    }
+
+    await delay(1000);
+
+    while (atempts > 0) {
+        try {
+            fs.rmSync(tmpDirName, { recursive: true, force: true });
+            break;
+        } catch {
+            // eslint-disable-next-line no-await-in-loop
+            await delay(500);
+        }
+    }
 }

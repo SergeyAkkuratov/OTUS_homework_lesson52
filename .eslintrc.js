@@ -32,6 +32,7 @@ module.exports = {
             },
         ],
         "no-shadow": "off",
+        "no-console": "off",
         "@typescript-eslint/no-shadow": "error",
     },
 };
