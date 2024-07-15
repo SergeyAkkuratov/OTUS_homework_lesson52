@@ -1,6 +1,6 @@
 import childProcess from "child_process";
 import fs from "fs";
-import publish, { ExecError, isExecError } from "./gitApi";
+import publish, { ExecError, isExecError, showMessage } from "./gitApi";
 
 jest.mock("fs");
 jest.mock("child_process");
@@ -132,4 +132,15 @@ describe("Git API tests", () => {
         expect(rmSpy).toHaveBeenCalledTimes(1);
         expect(logSpy).toHaveBeenCalledWith(new Error("unknown error"));
     });
+
+    it("test shoMessage", () => {
+        const logSpy = jest.spyOn(console, "log");
+
+        showMessage("error", { silence: true });
+        showMessage("test 1", { silence: false });
+        showMessage("test 2");
+        
+        expect(logSpy).toHaveBeenCalledWith("test 1");
+        expect(logSpy).toHaveBeenCalledWith("test 2");
+    })
 });

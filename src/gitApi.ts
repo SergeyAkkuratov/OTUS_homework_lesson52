@@ -19,6 +19,12 @@ export interface ExecError {
     stderr: Buffer;
 }
 
+export function showMessage(message: string, options?: OptionValues) {
+    if(!options?.silence){
+        console.log(message);
+    }
+}
+
 export function isExecError(e: unknown): e is ExecError {
     return (
         !!e &&
@@ -41,17 +47,23 @@ export function isExecError(e: unknown): e is ExecError {
 export default async function publish(options: OptionValues) {
     try {
         if (options.exec) {
+            showMessage("Execute pre-deploy actions...", options);
             execSync(`${options.exec}`);
         }
+        showMessage("Prepare repository...", options);
         execSync(`git clone ${options.repository} ${tmpDirName}`, { stdio: ["ignore", "pipe", "pipe"] });
         execSync(`git checkout ${options.branch}`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
 
+        showMessage("Copy files from deploy dir...", options);
         fs.cpSync(options.deploy, tmpDirName, { recursive: true });
 
+        showMessage("Commit and push files to repo...", options);
         execSync(`git add .`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
         execSync(`git commit -m "GitHub Pages deploy"`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
         execSync(`git push`, { cwd: tmpDirName, stdio: ["ignore", "pipe", "pipe"] });
+        showMessage("Done!", options);
     } catch (error) {
+        console.log("Something went wrong, deploy haven't done:");
         if (isExecError(error)) {
             console.error(`${error.stdout}\n${error.stderr}`);
         } else {

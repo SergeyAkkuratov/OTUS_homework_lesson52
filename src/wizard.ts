@@ -21,9 +21,12 @@ export default async function runWizard() {
         branch: await input({ message: "Enter branch name to publish: ", default: "gh-pages" }),
         deploy: await input({ message: "Enter path to directory with files to publish:", default: "./" }),
     };
-    const needBuild = await confirm({ message: "Do you need to do some actions before deploy?" });
+    const needBuild = await confirm({ message: "Do you need to do some actions before deploy?", default: false });
     if (needBuild) {
         options.exec = await input({ message: "Enter command to run before deploy:" });
     }
+
+    options.silence = !await confirm({ message: "Do you want to see info message from gh-pub?", default: true });
+
     return options;
 }
